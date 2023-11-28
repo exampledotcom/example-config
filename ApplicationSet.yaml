@@ -36,8 +36,8 @@ spec:
               value: '{{ branch }}-{{ head_sha }}'
             - name: name
               value: 'example-app'
-            - name: ingprefix
-              value: '{{ branch }}'
+            - name: subdomain
+              value: 'dev-{{ branch }}'
             - name: ingressport
               value: '9090'
       syncPolicy:
