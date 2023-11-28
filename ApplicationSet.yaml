@@ -36,6 +36,8 @@ spec:
               value: '{{ branch }}-{{ head_sha }}'
             - name: name
               value: example-app
+            - name: ingressport
+              value: '9090'
       syncPolicy:
         automated:
           selfHeal: true
