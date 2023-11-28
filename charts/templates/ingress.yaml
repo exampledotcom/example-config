@@ -5,10 +5,10 @@ metadata:
 spec:
   ingressClassName: nginx
   rules:
-  - host: '{{ .Values.subdomain }}.127.0.0.1.nip.io'
+  - host: '127.0.0.1.nip.io'
   - http:
       paths:
-      - path: /
+      - path: '/{{ .Values.subdomain }}'
         pathType: Prefix
         backend:
           service:
