@@ -8,7 +8,7 @@ spec:
   - host: '127.0.0.1.nip.io'
   - http:
       paths:
-      - path: '/{{ .Values.subdomain }}'
+      - path: '/{{ .Values.url }}'
         pathType: Prefix
         backend:
           service:

@@ -4,42 +4,52 @@ metadata:
   name: dev-preview-set
 spec:
   generators:
-    - pullRequest:
+    - scmProvider:
         github:
-          owner: exampledotcom
-          repo: example-app
+          organization: exampledotcom
+          allBranches: true
           tokenRef:
             key: token
             secretName: github-token
-        requeueAfterSeconds: 60
+        cloneProtocol: "https"
+        filters:
+          - repositoryMatch: '^example-app'
+            branchMatch: '^feat'
+        values:
+          registry: 'docker.io'
   template:
     metadata:
-      name: 'example-app-{{ branch }}-{{ number }}'
+      name: '{{ repository }}-{{ branchNormalized | replace "." "-" }}'
     spec:
       destination:
-        namespace: 'preview-{{ branch }}'
-        server: 'https://kubernetes.default.svc'
+        namespace: dev-previews
+        server: https://kubernetes.default.svc
       project: default
       source:
-        path: charts/
-        repoURL: 'https://github.com/exampledotcom/example-config.git'
-        targetRevision: HEAD
+        path: 'charts/'
+        repoURL: '{{ url }}'
+        targetRevision: '{{ branch }}'
         helm:
           parameters:
-            - name: namespace
-              value: 'preview-{{ branch }}'
+            - name: name
+              value: '{{ repository }}'
             # see .env.IMAGE_NAME_TAG in example-app/.github/workflows/build-container.yaml
             - name: imagename
-              value: 'example-app'
+              value: '{{ repository }}'
             # to match ${{ github.ref_name }}-${{ github.sha }}
             - name: imagetag
               value: '{{ branch }}-{{ head_sha }}'
-            - name: name
-              value: 'example-app'
-            - name: subdomain
+            - name: url
               value: 'dev-{{ branch }}'
             - name: ingressport
               value: '9090'
+            # - name: 'ingress.host'
+            #   value: 'preview-{{ branchNormalized | replace "." "-" }}.dev.exampledotcom.io'
       syncPolicy:
         automated:
+          prune: true
           selfHeal: true
+          allowEmpty: false
+        syncOptions:
+          - PrunePropagationPolicy=foreground
+          - PruneLast=true
