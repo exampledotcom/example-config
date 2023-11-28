@@ -30,12 +30,14 @@ spec:
               value: 'preview-{{ branch }}'
             # see .env.IMAGE_NAME_TAG in example-app/.github/workflows/build-container.yaml
             - name: imagename
-              value: example-app
+              value: 'example-app'
             # to match ${{ github.ref_name }}-${{ github.sha }}
             - name: imagetag
               value: '{{ branch }}-{{ head_sha }}'
             - name: name
-              value: example-app
+              value: 'example-app'
+            - name: ingprefix
+              value: '{{ branch }}'
             - name: ingressport
               value: '9090'
       syncPolicy:
