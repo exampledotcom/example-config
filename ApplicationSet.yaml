@@ -12,6 +12,7 @@ spec:
             key: token
             secretName: github-token
         cloneProtocol: "https"
+        requeueAfterSeconds: 30
         filters:
           - repositoryMatch: '^example-app'
             branchMatch: '^feat'
@@ -19,7 +20,7 @@ spec:
           registry: 'docker.io'
   template:
     metadata:
-      name: '{{ repository }}-{{ branchNormalized | replace "." "-" }}'
+      name: '{{ repository }}-{{ branchNormalized }}'
     spec:
       destination:
         namespace: dev-previews
@@ -27,20 +28,20 @@ spec:
       project: default
       source:
         path: 'charts/'
-        repoURL: '{{ url }}'
-        targetRevision: '{{ branch }}'
+        repoURL: 'https://github.com/exampledotcom/example-config.git'
+        targetRevision: 'HEAD'
         helm:
           parameters:
             - name: name
-              value: '{{ repository }}'
+              value: '{{ repository }}-{{ branch }}'
             # see .env.IMAGE_NAME_TAG in example-app/.github/workflows/build-container.yaml
             - name: imagename
               value: '{{ repository }}'
             # to match ${{ github.ref_name }}-${{ github.sha }}
             - name: imagetag
-              value: '{{ branch }}-{{ head_sha }}'
+              value: '{{ branch }}-{{ sha }}'
             - name: url
-              value: 'dev-{{ branch }}'
+              value: '{{ branch }}.pre'
             - name: ingressport
               value: '9090'
             # - name: 'ingress.host'
