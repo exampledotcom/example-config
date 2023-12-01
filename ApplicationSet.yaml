@@ -16,8 +16,6 @@ spec:
         filters:
           - repositoryMatch: '^example-app'
             branchMatch: '^feat'
-        values:
-          registry: 'docker.io'
   template:
     metadata:
       name: '{{ repository }}-{{ branchNormalized }}'
