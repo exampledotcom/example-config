@@ -6,7 +6,7 @@ spec:
   generators:
     - scmProvider:
         github:
-          organization: exampledotcom
+          organization: 'Cofinity-X'
           allBranches: true
           tokenRef:
             key: token
@@ -16,6 +16,10 @@ spec:
         filters:
           - repositoryMatch: '^example-app'
             branchMatch: '^feat'
+          - repositoryMatch: '^cofinity-x'
+            branchMatch: '^dev'
+            pathsExist: [k8s/kustomization.yaml]
+            pathsDoNotExist: [argo.disable]
   template:
     metadata:
       name: '{{ repository }}-{{ branchNormalized }}'
@@ -32,18 +36,16 @@ spec:
           parameters:
             - name: name
               value: '{{ repository }}-{{ branch }}'
-            # see .env.IMAGE_NAME_TAG in example-app/.github/workflows/build-container.yaml
             - name: imagename
+              # see .env.IMAGE_NAME_TAG in example-app/.github/workflows/build-container.yaml
               value: '{{ repository }}'
-            # to match ${{ github.ref_name }}-${{ github.sha }}
             - name: imagetag
+              # to match ${{ github.ref_name }}-${{ github.sha }}
               value: '{{ branch }}-{{ sha }}'
             - name: url
               value: '{{ branch }}.pre'
-            - name: ingressport
-              value: '9090'
             # - name: 'ingress.host'
-            #   value: 'preview-{{ branchNormalized | replace "." "-" }}.dev.exampledotcom.io'
+            #   value: 'dev-{{ branchNormalized }}.dev.cofinity-x.com'
       syncPolicy:
         automated:
           prune: true
