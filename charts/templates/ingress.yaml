@@ -5,13 +5,13 @@ metadata:
 spec:
   ingressClassName: nginx
   rules:
-  - host: '{{ .Values.url }}.dev.exampledotcom.io'
+  - host: '127.0.0.1.nip.io'
   - http:
       paths:
-      - path: '/'
+      - path: '/{{ .Values.url }}'
         pathType: Prefix
         backend:
           service:
             name: '{{ .Values.name }}-service'
             port:
-              number: {{ .Values.ingressport }}
+              number: 80

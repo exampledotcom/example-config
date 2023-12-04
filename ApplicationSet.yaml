@@ -39,11 +39,7 @@ spec:
             - name: imagetag
               value: '{{ branch }}-{{ sha }}'
             - name: url
-              value: '{{ branch }}.pre'
-            - name: ingressport
-              value: '9090'
-            # - name: 'ingress.host'
-            #   value: 'preview-{{ branchNormalized | replace "." "-" }}.dev.exampledotcom.io'
+              value: 'dev-{{ branch }}'
       syncPolicy:
         automated:
           prune: true
