@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: {{ .Values.name }}
-        image: docker.io/kirici/{{ .Values.imagename }}:{{ .Values.imagetag }}
+        image: acrcfxsharedservices.azurecr.io/{{ .Values.imagename }}:{{ .Values.imagetag }}
         resources:
           requests:
             memory: "64Mi"
